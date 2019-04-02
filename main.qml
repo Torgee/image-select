@@ -10,6 +10,7 @@ import MyStuff 1.0
 ApplicationWindow {
     visibility: "Maximized"
     title: qsTr("Image Selector")
+    background: Rectangle { color: "black" }
 
     SwipeView {
         id: swipeView
@@ -71,23 +72,16 @@ ApplicationWindow {
         TabButton {
             text: qsTr("Remove")
             onPressed: remove(swipeView.currentItem.item)
-            background: Rectangle {
-                color: "red"
-            }
+            background: Rectangle { color: "red" }
         }
         TabButton {
             text: swipeView.currentItem.item.selected ? qsTr("X") : qsTr("O")
             width: height
-
-            background: Rectangle {
-                color: "grey"
-            }
+            background: Rectangle { color: "grey" }
         }
         TabButton {
             text: qsTr("Select")
-            background: Rectangle {
-                color: "green"
-            }
+            background: Rectangle { color: "green" }
             onPressed: save(swipeView.currentItem.item)
         }
         TabButton {
