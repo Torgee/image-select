@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 
 import QtQuick.Dialogs 1.3
 import Qt.labs.folderlistmodel 2.12
+import Qt.labs.platform 1.1
 import QtQuick.Layouts 1.12
 
 import MyStuff 1.0
@@ -36,7 +37,7 @@ ApplicationWindow {
             id: inputLocation
             showDotAndDotDot: true
             showDirsFirst: true
-            folder: "file:///home/torgee/testimages/in/"
+            folder: StandardPaths.writableLocation(StandardPaths.HomeLocation) + "/testimages/in/"
             nameFilters: ["*.jpg", "*.JPG"]
         }
 
@@ -105,7 +106,7 @@ ApplicationWindow {
 
     FolderListModel {
         id: outputLocation
-        folder: "file:///home/torgee/testimages/out/"
+        folder: StandardPaths.writableLocation(StandardPaths.HomeLocation) + "/testimages/out/"
         showDirs: false
         nameFilters: inputImageSources.nameFilters
     }
