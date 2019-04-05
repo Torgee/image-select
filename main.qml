@@ -9,16 +9,17 @@ import MyStuff 1.0
 
 ApplicationWindow {
     visibility: "Maximized"
+    visible: true
     title: qsTr("Image Selector")
     background: Rectangle { color: "black" }
 
     SwipeView {
-        id: swipeView
+        id: imageDisplay
         anchors.fill: parent
 
         Repeater {
             id: repeater
-            model: inputLocation
+            model: inputImageSources
             Loader {
                 active: SwipeView.isCurrentItem || SwipeView.isNextItem || SwipeView.isPreviousItem
                 sourceComponent: Image {
@@ -43,16 +44,17 @@ ApplicationWindow {
     }
 
     FolderListModel {
-        id: inputLocation
+        id: inputImageSources
         folder: "file:///home/torgee/testimages/in/"
         showDirs: false
         nameFilters: ["*.jpg", "*.JPG"]
     }
+
     FolderListModel {
         id: outputLocation
         folder: "file:///home/torgee/testimages/out/"
-        showDirs: inputLocation.showDirs
-        nameFilters: inputLocation.nameFilters
+        showDirs: inputImageSources.showDirs
+        nameFilters: inputImageSources.nameFilters
     }
 
     function save(image) {
@@ -67,26 +69,26 @@ ApplicationWindow {
     footer: TabBar {
         TabButton {
             text: qsTr("Previous")
-            onPressed: swipeView.decrementCurrentIndex()
+            onPressed: imageDisplay.decrementCurrentIndex()
         }
         TabButton {
             text: qsTr("Remove")
-            onPressed: remove(swipeView.currentItem.item)
+            onPressed: remove(imageDisplay.currentItem.item)
             background: Rectangle { color: "red" }
         }
         TabButton {
-            text: swipeView.currentItem.item.selected ? qsTr("X") : qsTr("O")
+            text: imageDisplay.currentItem ? (imageDisplay.currentItem.item.selected ? qsTr("X") : qsTr("O")) : qsTr("?")
             width: height
             background: Rectangle { color: "grey" }
         }
         TabButton {
             text: qsTr("Select")
             background: Rectangle { color: "green" }
-            onPressed: save(swipeView.currentItem.item)
+            onPressed: save(imageDisplay.currentItem.item)
         }
         TabButton {
             text: qsTr("Next")
-            onPressed: swipeView.incrementCurrentIndex()
+            onPressed: imageDisplay.incrementCurrentIndex()
         }
     }
 }
