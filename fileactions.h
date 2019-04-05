@@ -12,7 +12,6 @@ public:
 
     Q_INVOKABLE static void copy(QUrl from, QUrl to);
     Q_INVOKABLE static void del(QUrl where);
-    Q_INVOKABLE static QString urlToPath(QUrl url);
 
 signals:
 
