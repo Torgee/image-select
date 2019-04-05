@@ -13,9 +13,60 @@ ApplicationWindow {
     title: qsTr("Image Selector")
     background: Rectangle { color: "black" }
 
+    ListView {
+        id: inputLocationSelect
+        anchors.top: parent.top
+        anchors.bottom: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        headerPositioning: ListView.OverlayHeader
+        header: Label {
+            width: parent.width
+            z: 2
+            text: qsTr("Source Location: ") + inputLocation.folder
+            color: "black"
+            background: Rectangle { color: "magenta"}
+        }
+
+        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+        clip: true
+
+        model: FolderListModel {
+            id: inputLocation
+            showDotAndDotDot: true
+            showDirsFirst: true
+            folder: "file:///home/torgee/testimages/in/"
+            nameFilters: ["*.jpg", "*.JPG"]
+        }
+
+        delegate: ToolButton {
+            id: control
+            width: parent.width
+            text: fileName
+            contentItem: Label {
+                text: control.text
+                font: control.font
+                color: "white"
+                background: Rectangle { color: fileIsDir ? "teal" : "orange" }
+            }
+            onClicked: {
+
+                if (fileIsDir) {
+                    inputLocation.folder = fileURL
+                } else {
+                    imageDisplay.currentIndex = inputImageSources.indexOf(fileURL)
+                }
+            }
+        }
+    }
+
     SwipeView {
         id: imageDisplay
-        anchors.fill: parent
+        anchors.top: inputLocationSelect.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         Repeater {
             id: repeater
@@ -31,10 +82,12 @@ ApplicationWindow {
                     source: fileURL
                     property string fileName: model.fileName
 
-                    Text {
+                    Label {
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
                         text: source
+                        color: "white"
+                        background: Rectangle { color: "black" }
                     }
 
                     property bool selected: outputLocation.count, (outputLocation.indexOf(source) >= 0)
@@ -45,15 +98,15 @@ ApplicationWindow {
 
     FolderListModel {
         id: inputImageSources
-        folder: "file:///home/torgee/testimages/in/"
+        folder: inputLocation.folder
         showDirs: false
-        nameFilters: ["*.jpg", "*.JPG"]
+        nameFilters: inputLocation.nameFilters
     }
 
     FolderListModel {
         id: outputLocation
         folder: "file:///home/torgee/testimages/out/"
-        showDirs: inputImageSources.showDirs
+        showDirs: false
         nameFilters: inputImageSources.nameFilters
     }
 

@@ -19,3 +19,8 @@ void FileActions::del(QUrl where)
     QFile file{where.path()};
     file.remove();
 }
+
+QString FileActions::urlToPath(QUrl url)
+{
+    return url.path();
+}
